@@ -1,9 +1,9 @@
 1, I
 4, IV
 700, DCC
-45, XLIV
-399, CCXLIX
-5474, MMMMCDLXXIV
+45, XLV
+399, CCCXCIX
+5474, MMMMMCDLXXIV
 0, 
 , Not accepted
 3.5, Not accepted
