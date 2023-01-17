@@ -2,41 +2,90 @@ import os
 import sys
 
 numerals = {1:"I", 5:"V", 10:"X", 50:"L", 100:"C", 500:"D", 1000:"M"}
+values = {"I":1, "V":5, "X":10, "L":50, "C":100, "D":500, "M":1000}
 
 
-def toRoman(inp_raw):
+def toRoman(inp):
     nums = sorted(numerals, reverse=True)
     out = ""
 
-    try:
+    if inp < 0:
+        raise ValueError()
 
-        inp = int(inp_raw)
-
-        while inp > 0:  
-            current_num = nums[0]
-            if current_num <= inp:
-                inp -= current_num
-                out += numerals[current_num]
-            else:
-                if current_num//5 in nums:
-                    if current_num - current_num//5 <= inp:
-                        inp -= current_num - current_num//5
-                        out += numerals[current_num//5] + numerals[current_num]
-                    else:
-                        nums.remove(current_num)
-                elif current_num//10 in nums and str(current_num)[0] == "1":
-                    if current_num - current_num//10 <= inp:
-                        inp -= current_num - current_num//10
-                        out += numerals[current_num//10] + numerals[current_num]
-                    else:
-                        nums.remove(current_num)
+    while inp > 0:  
+        current_num = nums[0]
+        if current_num <= inp:
+            inp -= current_num
+            out += numerals[current_num]
+        else:
+            if current_num//5 in nums:
+                if current_num - current_num//5 <= inp:
+                    inp -= current_num - current_num//5
+                    out += numerals[current_num//5] + numerals[current_num]
                 else:
                     nums.remove(current_num)
-
-    except ValueError:
-        out = "Not accepted"
+            elif current_num//10 in nums and str(current_num)[0] == "1":
+                if current_num - current_num//10 <= inp:
+                    inp -= current_num - current_num//10
+                    out += numerals[current_num//10] + numerals[current_num]
+                else:
+                    nums.remove(current_num)
+            else:
+                nums.remove(current_num)
     
     return out
+
+
+def fromRoman(inp):
+    try:
+        if not isinstance(inp, str):
+            raise KeyError()
+        out = fromRomanRecurse(inp)[0]
+    except KeyError:
+        out = "Not accepted"
+    return out
+
+def fromRomanRecurse(inp, big_value = None):
+
+    if len(inp) == 0:
+        return 0, 0
+
+    if len(inp) == 1:
+        if big_value is None or values[inp] <= big_value:
+            return values[inp], 0
+        else:
+            raise KeyError
+
+    total = 0
+
+    char = inp[0]
+
+    big_value = values[char]
+
+    if str(values[char])[0] == "1" and values[inp[1]]//values[char] in [5,10]:
+        char2 = inp[1]
+        total += values[char2] - values[char]
+        if len(inp) == 2:
+            return total, 0
+        recieved = fromRomanRecurse(inp[2:], big_value)
+    else:
+        total += values[char]
+        recieved = fromRomanRecurse(inp[1:], big_value)
+    if recieved[1] > big_value:
+        raise KeyError()
+    total += recieved[0]
+    
+    return total, total-recieved[0]
+
+def romanConvert(inp_raw):
+    try:
+        inp = int(inp_raw)
+        out = toRoman(inp)
+    except ValueError:
+        out = fromRoman(inp_raw)
+    return str(out)
+    
+        
 
 
 tests = open(os.path.join(sys.path[0], 'RomanUnitTests.txt'), "r").readlines()
@@ -52,7 +101,7 @@ for line in tests:
     except IndexError:
         expected = ""
 
-    out = toRoman(inp_raw)
+    out = romanConvert(inp_raw)
     
     if out == expected:
         print(f"Test, input {inp_raw} Passed")

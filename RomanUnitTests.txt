@@ -5,6 +5,16 @@
 399, CCCXCIX
 5474, MMMMMCDLXXIV
 0, 
-, Not accepted
 3.5, Not accepted
+-5, Not accepted
+I, 1
+V, 5
+IV, 4
+XLV, 45
+CCCXCIX, 399
+MDXXXIII, 1533
+MDCLXVI, 1666
+, 0
+DM, Not accepted
+IXIV, Not accepted
 Seventeen, Not accepted
