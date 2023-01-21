@@ -54,15 +54,36 @@ class Rational():
         return total
 
     def __add__(a, b):
-        pass
+        if isinstance(b, int) or isinstance(b, float):
+            return Rational(a.num + b*a.den, a.den)
+        if not isinstance(b, Rational):
+            raise ValueError("Unsupported types for addition")
+        lcm = Rational.__get_cd(a.den, b.den)
+        num = a.num*lcm/b.den + b.num*lcm/a.den
+        return Rational(num, lcm)
+
 
     def __sub__(a, b):
-        pass
+        if isinstance(b, int) or isinstance(b, float):
+            return Rational(a.num - b*a.den, a.den)
+        if not isinstance(b, Rational):
+            raise ValueError("Unsupported types for subtraction")
+        lcm = Rational.__get_cd(a.den, b.den)
+        num = a.num*lcm/b.den - b.num*lcm/a.den
+        return Rational(num, lcm)
 
     def __mul__(a, b):
+        if isinstance(b, int) or isinstance(b, float):
+            return Rational(a.num*b, a.den)
+        if not isinstance(b, Rational):
+            raise ValueError("Unsupported types for multiplication")
         return Rational(a.num * b.num, a.den * b.den)
 
     def __div__(a, b):
+        if isinstance(b, int) or isinstance(b, float):
+            return Rational(a.num, a.den*b)
+        if not isinstance(b, Rational):
+            raise ValueError("Unsuppported types for division")
         return Rational(a.num * b.den, a.den * b.num)
     
     def __eq__(a, b):
@@ -72,9 +93,21 @@ class Rational():
         return str(self.num) + "/" + str(self.den)
 
     def __init__(self, num, den):
+        if not isinstance(num, int) and not isinstance(num, float):
+            raise ValueError("Invalid type for numerator of rational")
+        if not isinstance(den, int) and not isinstance(den, float):
+            raise ValueError("Invalid type for denominator of rational")
+        if den == 0:
+            raise ZeroDivisionError("Denominator cannot be zero")
         self.num = num
         self.den = den
         self.__simplify()
+        if self.den == 1:
+            del(self)
+            return self.num
     
     def __simplify(self):
-        pass
+        hcf = Rational.__get_hf(self.num, self.den)
+        self.num //= hcf
+        self.den //= hcf
+        
