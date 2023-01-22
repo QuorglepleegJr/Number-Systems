@@ -51,7 +51,7 @@ def fromRomanRecurse(inp, big_value=None):
         return 0, 0
 
     if len(inp) == 1:
-        if big_value is None or values[inp] <= big_value:
+        if big_value is None or values[inp] < big_value:
             return values[inp], 0
         else:
             raise KeyError
@@ -70,7 +70,7 @@ def fromRomanRecurse(inp, big_value=None):
         big_value = values[char]
         recieved = fromRomanRecurse(inp[2:], big_value)
     else:
-        big_value = values[char]
+        big_value = values[char] + 1
         total += values[char]
         recieved = fromRomanRecurse(inp[1:], big_value)
     if recieved[1] > big_value:
