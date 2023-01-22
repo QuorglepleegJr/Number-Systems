@@ -45,7 +45,7 @@ def fromRoman(inp):
         out = "Not accepted"
     return out
 
-def fromRomanRecurse(inp, big_value = None):
+def fromRomanRecurse(inp, big_value=None):
 
     if len(inp) == 0:
         return 0, 0
@@ -60,15 +60,17 @@ def fromRomanRecurse(inp, big_value = None):
 
     char = inp[0]
 
-    big_value = values[char]
-
     if str(values[char])[0] == "1" and values[inp[1]]//values[char] in [5,10]:
         char2 = inp[1]
         total += values[char2] - values[char]
         if len(inp) == 2:
+            if big_value is not None and total >= big_value:
+              raise KeyError()
             return total, 0
+        big_value = values[char]
         recieved = fromRomanRecurse(inp[2:], big_value)
     else:
+        big_value = values[char]
         total += values[char]
         recieved = fromRomanRecurse(inp[1:], big_value)
     if recieved[1] > big_value:
@@ -109,12 +111,12 @@ for line in tests:
         print(f"Test, input {inp_raw} FAILED, expected {expected}, got {out}")
         break
 
-inp_raw = input("Enter number (quit to quit): ")
+inp_raw = input("Enter value (quit to quit): ")
 
 while inp_raw != "quit":
-    out = toRoman(inp_raw)
+    out = romanConvert(inp_raw)
     if out == "Not accepted":
-        print("Input must be a non-negative integer")
+        print("Input must be a non-negative integer or valid string of Roman numerals")
     else:
         print(f"{inp_raw} -> {out}")
 

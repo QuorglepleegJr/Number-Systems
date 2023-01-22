@@ -89,8 +89,17 @@ class Rational():
     def __eq__(a, b):
         return a.num == b.num and a.den == b.den
 
+    def __gt__(a, b):
+        return a.num/a.den > b.num/b.den
+
     def __repr__(self):
         return str(self.num) + "/" + str(self.den)
+
+    def __new__(cls, num, den):
+        if int(num/den) == num/den:
+            return int(num/den)
+        return super().__new__(Rational)
+
 
     def __init__(self, num, den):
         if not isinstance(num, int) and not isinstance(num, float):
@@ -102,11 +111,17 @@ class Rational():
         self.num = num
         self.den = den
         self.__simplify()
-        if self.den == 1:
-            del(self)
-            return self.num
-    
+
     def __simplify(self):
+        if isinstance(self.den, float):
+            scale = len(str(self.den).split("."))
+            self.den = int(self.den*10**scale)
+            self.num = int(self.num*10**scale)
+        if isinstance(self.num, float):
+            scale = len(str(self.num).split("."))
+            self.den = int(self.den*10**scale)
+            self.num = int(self.num*10**scale)
+
         hcf = Rational.__get_hf(self.num, self.den)
         self.num //= hcf
         self.den //= hcf
