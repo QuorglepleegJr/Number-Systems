@@ -1,8 +1,5 @@
 class Rational():
 
-
-    # TO FINISH - ADD ADD, SUB, LESSER
-
     def __get_p_factors(a):
         a_div = []
 
@@ -10,7 +7,7 @@ class Rational():
 
         current = 1
 
-        while a > 1:
+        while abs(a) > 1:
             current += 1
             prime = True
             for p in primes:
@@ -26,7 +23,6 @@ class Rational():
         return a_div
 
     def __get_cd(a, b):
-        #TEMPORARY INEFFECIENT METHOD
         
         a_div = Rational.__get_p_factors(a)
         b_div = Rational.__get_p_factors(b)
@@ -41,6 +37,7 @@ class Rational():
         return total
     
     def __get_hf(a, b):
+
         a_div = Rational.__get_p_factors(a)
         b_div = Rational.__get_p_factors(b)
 
@@ -59,7 +56,7 @@ class Rational():
         if not isinstance(b, Rational):
             raise ValueError("Unsupported types for addition")
         lcm = Rational.__get_cd(a.den, b.den)
-        num = a.num*lcm/b.den + b.num*lcm/a.den
+        num = a.num*lcm/a.den + b.num*lcm/b.den
         return Rational(num, lcm)
 
 
@@ -69,7 +66,7 @@ class Rational():
         if not isinstance(b, Rational):
             raise ValueError("Unsupported types for subtraction")
         lcm = Rational.__get_cd(a.den, b.den)
-        num = a.num*lcm/b.den - b.num*lcm/a.den
+        num = a.num*lcm/a.den - b.num*lcm/b.den
         return Rational(num, lcm)
 
     def __mul__(a, b):
@@ -79,7 +76,7 @@ class Rational():
             raise ValueError("Unsupported types for multiplication")
         return Rational(a.num * b.num, a.den * b.den)
 
-    def __div__(a, b):
+    def __truediv__(a, b):
         if isinstance(b, int) or isinstance(b, float):
             return Rational(a.num, a.den*b)
         if not isinstance(b, Rational):
@@ -92,19 +89,25 @@ class Rational():
     def __gt__(a, b):
         return a.num/a.den > b.num/b.den
 
-    def __repr__(self):
-        return str(self.num) + "/" + str(self.den)
-
-    def __new__(cls, num, den):
-        if int(num/den) == num/den:
-            return int(num/den)
-        return super().__new__(Rational)
-
+    def __str__(self):
+        if self.num < 0 and self.den >=0 or self.num >=0 and self.den < 0:
+            return "-" + str(abs(self.num)) + "/" + str(abs(self.den))
+        return str(abs(self.num)) + "/" + str(abs(self.den))
 
     def __init__(self, num, den):
-        if not isinstance(num, int) and not isinstance(num, float):
+        try:
+            new_num = float(num)
+            if "e" in str(new_num):
+                new_num = int(num)
+            num = new_num
+        except ValueError:
             raise ValueError("Invalid type for numerator of rational")
-        if not isinstance(den, int) and not isinstance(den, float):
+        try:
+            new_den = float(den)
+            if "e" in str(new_den):
+                new_den = int(den)
+            den = new_den
+        except ValueError:
             raise ValueError("Invalid type for denominator of rational")
         if den == 0:
             raise ZeroDivisionError("Denominator cannot be zero")
@@ -113,13 +116,20 @@ class Rational():
         self.__simplify()
 
     def __simplify(self):
+        print(self.num, self.den, str(self.num), str(self.den))
         if isinstance(self.den, float):
-            scale = len(str(self.den).split("."))
+            decimal = str(self.den).split(".")[1]
+            while len(decimal) > 0 and decimal[-1] == "0":
+                decimal = decimal[:-1]
+            scale = len(decimal)
             self.den = int(self.den*10**scale)
-            self.num = int(self.num*10**scale)
+            self.num = self.num*10**scale
         if isinstance(self.num, float):
-            scale = len(str(self.num).split("."))
-            self.den = int(self.den*10**scale)
+            decimal = str(self.num).split(".")[1]
+            while len(decimal) > 0 and decimal[-1] == "0":
+                decimal = decimal[:-1]
+            scale = len(decimal)
+            self.den = self.den*10**scale
             self.num = int(self.num*10**scale)
 
         hcf = Rational.__get_hf(self.num, self.den)

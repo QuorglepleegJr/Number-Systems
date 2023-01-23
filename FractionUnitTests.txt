@@ -1,0 +1,39 @@
+Rational(1,2) : 1/2
+Rational(3,1) : 3/1
+Rational(6,8) : 3/4
+Rational(-3,5) : -3/5
+Rational(14,-7) : -2/1
+Rational(0,17) : 0/17
+Rational(-93,0) : Denominator cannot be zero
+Rational(3.5,7) : 1/2
+Rational(-1.2,2.4) : -1/2
+Rational("b",7) : Invalid type for numerator of rational
+Rational(7,"x") : Invalid type for denominator of rational
+Rational(1,2)*2 : 1/1
+Rational(1,3)*4 : 4/3
+Rational(7,12)*1.5 : 7/8
+Rational(3,4)*Rational(8,6) : 1/1
+Rational(7,8.5)*Rational(-17,3) : -14/3
+Rational(17,3)*0 : 0/3
+Rational(1,2)/2 : 1/4
+Rational(1,3)/4 : 1/12
+Rational(7,12)/1.5 : 7/18
+Rational(3,4)/Rational(8,6) : 9/16
+Rational(7,8.5)/Rational(-17,3) : -42/289
+Rational(17,3)/0 : Denominator cannot be zero
+Rational(1,2)+1 : 3/2
+Rational(1,2)+2.5 : 3/1
+Rational(3,7)+Rational(2,7) : 5/7
+Rational(4.5,9)+Rational(17,18) : 13/9
+Rational(-3,5)+Rational(2,5) : -1/5
+Rational(1,2)-1 : -1/2
+Rational(1,2)-2.5 : -2/1
+Rational(3,7)-Rational(2,7) : 1/7
+Rational(4.5,9)-Rational(17,18) : -4/9
+Rational(-3,13)-Rational(2,13) : -5/13
+Rational(3,4)==Rational(6,8) : True
+Rational(1,2)==Rational(-1,2) : False
+Rational(1,2)>Rational(1,3) : True
+Rational(-17,3)>Rational(3,3) : False
+Rational(-17,3)>Rational(-29,3) : True
+Rational(1,2)>Rational(1000000000000000000000000,2000000000000000000000001) : True
